@@ -77,17 +77,26 @@ def adjust_extrusion(gcode, x_range, y_range, target_ratio):
     # Create a mask for points within the selected area
     mask = (gcode[:, 0] >= x_min) & (gcode[:, 0] <= x_max) & (gcode[:, 1] >= y_min) & (gcode[:, 1] <= y_max)
     
+    # Debugging: Print the number of points in the selected area
+    print(f"Number of points in selected area: {np.sum(mask)}")
+    
     # Calculate the differences between consecutive E values (delta extrusion)
     delta_e = np.diff(gcode[:, 2], prepend=gcode[0, 2])
+    
+    # Debugging: Print the original delta extrusion values
+    print(f"Original delta extrusion values: {delta_e[mask]}")
     
     # Adjust the delta extrusion values within the selected area
     delta_e[mask] *= target_ratio
     
+    # Debugging: Print the modified delta extrusion values
+    print(f"Modified delta extrusion values: {delta_e[mask]}")
+    
     # Reconstruct the absolute extrusion values
     gcode[:, 2] = np.cumsum(delta_e)
     
-    # Debugging: Print the modified extrusion values
-    print(f"Modified extrusion values: {gcode[mask, 2]}")
+    # Debugging: Print the modified absolute extrusion values
+    print(f"Modified absolute extrusion values: {gcode[mask, 2]}")
     
     return gcode
 
