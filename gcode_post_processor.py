@@ -80,6 +80,9 @@ def adjust_extrusion(gcode, x_range, y_range, target_ratio):
     # Debugging: Print the number of points in the selected area
     print(f"Number of points in selected area: {np.sum(mask)}")
     
+    # Debugging: Print the original extrusion values
+    print(f"Original extrusion values: {gcode[mask, 2]}")
+    
     # Adjust the extrusion values within the selected area
     gcode[mask, 2] *= target_ratio
     
